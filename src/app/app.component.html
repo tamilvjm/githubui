@@ -17,8 +17,8 @@
     </div>
   </nav>
   <div class="container">
-    <app-search (onSearchComplete)="getUserDetails($event)"></app-search>
-    <app-profile [user]="userDetail.user" [repos]="userDetail.repos"></app-profile>
+    <app-search (onSearchComplete)="getUserDetails($event)" #search></app-search>
+    <app-profile [user]="userDetail.user" [repos]="userDetail.repos" (refresh)="search.searchUser(userDetail.user)"></app-profile>
   </div>
 </div>
 

@@ -25,23 +25,30 @@ export class SearchComponent implements OnInit {
       searchTerm: ['']
     });
 
-    this.searchForm.get('searchTerm').valueChanges
-    .pipe(debounceTime(200), filter(term=> term.length > 0))
-    .subscribe(val => {
-      this.searchUser(val); 
-    });
+    // this.searchForm.get('searchTerm').valueChanges
+    //   .pipe(debounceTime(200), filter(term => term.length > 0))
+    //   .subscribe(val => {
+    //     this.searchUser(val);
+    //   });
   }
 
   searchUser(username) {
-    this.githubService.getUser(username)
-      .subscribe(user => {
-        this.githubService.getRepos(username).subscribe(repos => {
-          let userDetail = {user: user, repos: repos};
+    this.githubService.getRepos(username)
+      .subscribe(repos => {
+        console.log(repos, typeof repos);
+        if (!repos || repos.length === 0) {
+          this.githubService.getReposFromGithub(username).subscribe(repos => {
+            console.log(repos);
+            let userDetail = { repos: repos, save: true, user: username };
+            this.onSearchComplete.emit(userDetail); 
+          },
+            (err) => {
+              alert(err);
+            });
+        } else {
+          let userDetail = { repos: repos, user: username };
           this.onSearchComplete.emit(userDetail);
-        },
-          (err) => {
-            alert(err);
-          });
+        }
       },
       (err) => {
         alert(err);

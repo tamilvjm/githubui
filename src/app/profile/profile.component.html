@@ -1,5 +1,5 @@
 <div *ngIf="user">
-  <div class="panel panel-default">
+  <!-- <div class="panel panel-default">
       <div class="panel-heading">
           <h3 class="panel-title">{{user.name}}</h3>
       </div>
@@ -27,7 +27,7 @@
           </div>
 
       </div>
-  </div>
+  </div> -->
   <div class="panel panel-default">
   <div class="panel-heading">
       <h3 class="panel-title">User Repos</h3>
@@ -40,7 +40,7 @@
                   <p>{{repo.description}}</p>
               </div>
               <div class="col-xs-3">
-                  <span class="label label-default">{{repo.watchers}} Watchers</span>
+                  <span class="label label-default" (click)="starRepo(repo.name)">{{repo.stargazers_count}} Stars</span>
                   <span class="label label-primary">{{repo.forks}} Forks</span>
               </div>
           </div>
