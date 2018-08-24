@@ -19,13 +19,21 @@ export class ProfileComponent implements OnInit {
 
   starRepo(repoName) {
     console.log("repo name : ", repoName);
-    this.githubService.starRepo(this.user, repoName).subscribe((res) => {
-      console.log("Starred");
-      this.refresh.emit();
-    }, (err) => {
-      console.log("Error occured while starring");
-    })
+
+    return this.githubService.getAccessToken(this.user).subscribe(
+      (res) => {
+        console.log(res, '-------------------------------------');
+        this.githubService.starRepo(this.user, repoName, res.accessToken).subscribe((res) => {
+          console.log("Starred");
+          this.refresh.emit();
+        }, (err) => {
+          console.log("Error occured while starring");
+        })
+      }, (err) => {
+        console.log("Error occured while starring ...");
+      })
   }
+
 
   ngOnInit() {
 

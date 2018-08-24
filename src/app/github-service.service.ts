@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient,  } from '@angular/common/http';
+import { HttpClient, } from '@angular/common/http';
 import { map, catchError } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
@@ -42,7 +42,22 @@ export class GithubServiceService {
         .set('Content-Type', 'application/json')
         .set('Cache-control', 'no-cache')
         .set('Expires', '0')
-       // .set('Pragma', 'no-cache')
+      // .set('Pragma', 'no-cache')
+
+    })
+      .pipe(
+      catchError(this.handleError)
+      );
+  }
+
+  getAccessToken(username) {
+
+    return this.http.get<any>(this.configUrl + '/accesstoken/' + username, {
+      headers: new HttpHeaders()
+        .set('Content-Type', 'application/json')
+        .set('Cache-control', 'no-cache')
+        .set('Expires', '0')
+      // .set('Pragma', 'no-cache')
 
     })
       .pipe(
@@ -52,7 +67,7 @@ export class GithubServiceService {
 
   saveRepos(repos) {
 
-    return this.http.post(this.configUrl + '/repos', repos,  {
+    return this.http.post(this.configUrl + '/repos', repos, {
       headers: new HttpHeaders()
         .set('Content-Type', 'application/json')
     })
@@ -61,21 +76,23 @@ export class GithubServiceService {
       );
   }
 
-  starRepo(username, reponame) {
+  starRepo(username, reponame, accessToken) {
 
-    return this.http.put(this.githubUrl1 + '/user/starred/'+username+'/' + reponame + '?client_id=' + this.client_id + '&client_secret=' + this.client_secret,{}, {
+    return this.http.put(this.githubUrl1 + '/user/starred/' + username + '/' + reponame +'?access_token='+accessToken , {}, {
       headers: new HttpHeaders()
         .set('Content-Type', 'application/json')
         //.set('Content-Length', '0')
+        .set('Authorization', 'token ' + accessToken)
         .set('Cache-control', 'no-cache')
-        .set('Expires', '0')
-        .set('Pragma', 'no-cache')
+       // .set('Expires', '0')
+       // .set('Pragma', 'no-cache')
 
     })
       .pipe(
       catchError(this.handleError)
       );
   }
+
 
   getReposFromGithub(username) {
 
